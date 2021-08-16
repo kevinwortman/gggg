@@ -1,0 +1,23 @@
+#! /usr/bin/python3
+
+import pathlib, shutil, subprocess
+
+# where to run "make grade"
+actual_path = '/autograder/submission'
+
+# The .zip is supposed to contain just the files, but a common user
+# error is to provide a .zip with one directory that contains the
+# files. Gracefully handle this.
+children = list(pathlib.Path(actual_path).iterdir())
+if len(children) == 1 and children[0].is_dir():
+    actual_path = children[0]
+
+# tamper-proof grading files
+for filename in ['Makefile', 'grade.py', 'algorithms_test.cpp']:
+    shutil.copy('/autograder/source/' + filename, actual_path)
+    
+# make grade
+subprocess.run(['make', 'grade'], cwd=actual_path)
+
+# copy results.json
+shutil.copy(actual_path / 'results.json', '/autograder/results/')
