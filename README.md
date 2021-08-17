@@ -34,10 +34,10 @@ Instructor creates an assignment:
    2. In Settings: turn on `Template repository`.
    3. Clone the repo to a local machine. Copy files from the `ggg/template-skeleton` directory: `Makefile`, `README.md`, `gggg.py`, `grade.py`, and (if relevant) `timer.hpp`.
 2. Create a C++ **solution**, unit tests, Makefile, and `grade.py` script (see the `template-example` directory for a working example). Confirm that `make grade` works and shows a perfect score. Never commit the solution, because students could view it in the git history.
-3. **Archives the solution**. Suggestion: `zip` the repo on the commandline.
-4. Modify the `.hpp` and `.cpp` files to become **starter code**; confirm that `make grade` works and shows an imperfect score; and commit+push the starter code.
-6. **Archive the starter code** for long term storage. Suggestion: web view > Code > Download ZIP.
-7. Creates an **autograder ZIP**. In a terminal, move into the template repo and run the gggg `make-autograder` script. `make-autograder -h` displays usage help. Pass a `-f <filename>` argument for each `<filename>` that students may not modify. The autograder will overwrite these files with starter code to prevent exploits against the autograder. Example:
+3. **Archive the solution**. Suggestion: `zip` the repo on the commandline.
+4. Modify the `.hpp` and `.cpp` files to become **starter code**; add a TODO comment everywhere that students should edit code; confirm that `make grade` works and shows an imperfect score; and commit+push the starter code.
+6. **Archive the starter code**. Suggestion: web view > Code > Download ZIP.
+7. Create an **autograder ZIP**. In the terminal, move into the template repo and run the gggg `make-autograder` script. `make-autograder -h` displays usage help. Pass a `-f <filename>` argument for each `<filename>` that students may not modify. The autograder will overwrite these files with starter code to prevent exploits against the autograder. Example:
    ```
    $ make-autograder -f Makefile -f gggg.py -f grade.py -f product_test.cpp -o autograder.zip
    ```
@@ -57,7 +57,7 @@ Instructor creates an assignment:
    13. Enable feedback pull requests: no (default)
    14. (Create Assignment)
    15. Copy the assignment link, you will need it below (looks like https://classroom.github.com/g/mwO5m1Za).
-10. Create a **Canvas assignment object**. This will only store the grades and make the deadline visible to students in Canvas. (If you do not use Canvas, create an assignment in your LMS of choice.)
+10. Create a **Canvas assignment object**. This is a lightweight placeholder that only serves to make the deadline visible in Canvas, and the grades available in the Canvas gradebook. (If you do not use Canvas, create an assignment in your LMS of choice.)
     1. Decide whether your assignment will be graded solely on the basis of automated `grade.py` scores, or will also include manual subjective scores.
     2. Calculate your maximum score = (max `grade.py` points) + (max manual points)
     3. Canvas > Create Assignment
@@ -65,12 +65,12 @@ Instructor creates an assignment:
     5. Submission type: External Tool > Gradescope. Load This Tool In A New Tab: yes 
     6. Allowed Attempts: Limited to 1 (unclear if this is honored)
     7. Assign to: everyone, with your stated deadline. (This deadline will be communicated to students in their calendar view. Gradescope will enforce the deadline.)
-11. Create a **Gradescope assignment object**.
+11. Create a **Gradescope assignment object**. This is the more substantial assignment where students make submissions, view feedback, and may request regrades.
     1. [gradescope.com](https://www.gradescope.com/) > Course > Assignments > Create New Assignment > Programming Assignment > Next
     2. Assignment Name: same as the Canvas assignment, e.g. "Project 2"
     3. Autograder points: (max `grade.py` points)
     4. Enable Manual Grading: yes iff you include manual subjective scores
-    5. Release date: now
+    5. Release date: your choice, probably now
     6. Due date: match deadline in Canvas
     7. Enable Group Submission: yes (if this is a group project)
     8. Limit Group Size: match group size in Github Education
@@ -88,12 +88,12 @@ Instructor creates an assignment:
 Students work an assignment:
 1. Decide on **who is in the team**. This **must** be done before the steps below. GitHub Education does not support modifying groups, and there is no interface for instructors to modify a group.
 2. The first group member follows the invitation URL (looks like https://classroom.github.com/g/mwO5m1Za) to **create a team** and repository.
-3. Subsequent team members, if any, follow the inviation URL and join the team from the previous step.
+3. Subsequent team members, if any, follow the invitation URL and join the team from the previous step. This is necessary for the team members to access the repo, but does not impact who gets credit for the submission.
 4. **Clone** the repo to local machines.
 5. **Develop code**; write, test, and debug. Run `make test` and respond to unit test feedback.
 6. **Preview grade**; run `make grade`, respond to feedback, and decide whether to continue working.
-7. **Submit** the repo to Gradescope. Follow [the instructions](https://help.gradescope.com/article/ccbpppziu9-student-submit-work#code_submissions); submitting a GitHub repo directly is bulletproof, but uploading a ZIP is also acceptable.
-8. **Confirm** that the Gradescope autograder feedback matches the local `make grade` output. Report discrepancies to the instructor.
+7. **Submit** the repo to Gradescope. Follow [the instructions](https://help.gradescope.com/article/ccbpppziu9-student-submit-work#code_submissions); submitting a GitHub repo directly is bulletproof, but uploading a ZIP is also acceptable. At this step, students indicate their team members if any. This choice determines who gets credit, but has no bearing on repo access.
+8. **Confirm** that the Gradescope autograder feedback matches the local `make grade` output. Report any discrepancies to the instructor.
 
 Instructors or graders grade the assignment:
 1. Suggestion: wait until after the deadline and grade all submissions in one pass.
@@ -104,11 +104,11 @@ Instructors or graders grade the assignment:
 
 ## `grade.py` Scripts
 
-Your assessment logic is defined in a `grade.py` script. The `make grade` make target runs `grade.py`. Students will run `make grade` interactively on local machines, and the Gradescope autograder will run `make grade` in a headless container. When invoked by `make grade`, `grade.py` typically examines the submission code; runs unit tests and examines their output (if using); prints a human-readable summary to standard output, for student consumption; and writes a `results.json`, for Gradescope autograder consumption.
+Your assessment logic is defined in a `grade.py` script. The `make grade` make target executes `grade.py`. Students will run `make grade` interactively on local machines, and the Gradescope autograder will run `make grade` in a headless container. When invoked by `make grade`, `grade.py` typically examines the submission code; runs unit tests and examines their output (if using); prints a human-readable summary to standard output, for student consumption; and writes a `results.json`, for Gradescope autograder consumption.
 
 There are two kinds of grading results:
-- Reject: The submission is illegible or otherwise unacceptable. Examples: no names; identical to starter code; does not compile; unit tests crash. The score is a flat hardcoded number, usually around 50% or 0%.
-- Accept: The submission is acceptable. It is subjected to correctness tests, and each passing tests adds points to the score, counting up from zero.
+- **Reject**: The submission is illegible or otherwise unacceptable. Examples: no names; identical to starter code; does not compile; unit tests crash. The score is a flat hardcoded number, usually around 50% or 0%.
+- **Accept**: The submission is acceptable. It is subjected to correctness tests, and each passing tests adds points to the score, counting up from zero.
 
 See `gggg.py` for the high-level grading API.
 - An `Assignment` object represents assignment policies, notably the maximum score, and score for a rejected submission.
@@ -156,6 +156,6 @@ s.summarize()
 ```
 ## Testing Interactive Programs
 
-Currently the only kind of correctness assessment that `gggg` supports is googletest unit tests. This supports advanced computer science courses where students implement C++ modules with functions and class members. However, it does not support introductory courses where students write programs that interact with stdin/stdout.
+Currently the only kind of correctness assessment that `gggg` supports is googletest unit tests. This accommodates advanced computer science courses where students implement C++ modules with functions and class members. However, it does not accommodate introductory courses where students write programs that interact with stdin/stdout.
 
-Functionality for running programs with stdin output and arguments, and assessing stdout output and return codes, is planned for Spring 2022. The author will be teaching an introductory course in that time frame. We have prototype code for this kind of assessment, and will refactor it into `gggg`.
+Functionality for running programs with stdin output and commandline arguments, and assessing stdout output and return codes, is planned for Spring 2022. The author will be teaching an introductory course in that time frame. We have prototype code for this kind of assessment, and will refactor it into `gggg`.
