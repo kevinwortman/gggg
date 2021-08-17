@@ -1,2 +1,89 @@
 #! /usr/bin/python3
 
+import argparse, json, os, pathlib, zipfile, zlib
+
+GGGG_REPO_PATH = pathlib.PurePath(os.path.realpath(__file__)).parent
+DEFAULT_SKELETON_PATH = pathlib.PurePath(GGGG_REPO_PATH, 'autograder-skeleton')
+DEFAULT_TEMPLATE_REPO_PATH = pathlib.Path.cwd()
+DEFAULT_OVERWRITE_FILENAMES = []
+DEFAULT_SETUP_COMMAND = 'apt-get -y install python3 build-essential clang libgtest-dev'
+DEFAULT_ZIP_PATH = 'autograder.zip'
+
+RUN_AUTOGRADER_FILENAME = 'run_autograder'
+
+def make_autograder(verbose,
+                    skeleton_path,
+                    template_repo_path,
+                    overwrite_filenames,
+                    setup_command,
+                    zip_path):
+    if not (isinstance(verbose, bool) and
+            isinstance(skeleton_path, pathlib.PurePath) and
+            isinstance(template_repo_path, pathlib.PurePath) and
+            isinstance(overwrite_filenames, list) and
+            all([isinstance(x, str) for x in overwrite_filenames]) and
+            isinstance(setup_command, str) and
+            isinstance(zip_path, str)):
+        raise TypeError
+    
+    with zipfile.ZipFile(zip_path,
+                         'w',
+                         compression=zipfile.ZIP_DEFLATED,
+                         compresslevel=zlib.Z_DEFAULT_COMPRESSION) as zip:
+
+        if verbose:
+            print('creating ' + zip_path)
+        
+        # copy run_autograder
+        run_autograder_path = pathlib.PurePath(skeleton_path, RUN_AUTOGRADER_FILENAME)
+        if verbose:
+            print('adding ' + str(run_autograder_path))
+        zip.write(run_autograder_path, RUN_AUTOGRADER_FILENAME)
+
+        # create setup.sh
+        if verbose:
+            print('adding setup.sh')
+        zip.writestr('setup.sh', setup_command)
+
+        # create overwrite.json
+        if verbose:
+            print('creating overwrite.json')
+        zip.writestr('overwrite.json', json.dumps(overwrite_filenames))
+
+        # copy overwrite files
+        for filename in overwrite_filenames:
+            path = os.path.join(template_repo_path, filename)
+            if verbose:
+                print('adding ' + path)
+            zip.write(path, filename)
+
+def main():
+    parser = argparse.ArgumentParser(description='create a GradeScope autograder .ZIP file')
+    parser.add_argument('--skeleton',
+                        help='path to gggg/autograder-skeleton directory',
+                        default=DEFAULT_SKELETON_PATH)
+    parser.add_argument('--repo',
+                        help='path to template github repo (the one you distribute to students)',
+                        default=DEFAULT_TEMPLATE_REPO_PATH)
+    parser.add_argument('--overwrite', '-f',
+                        help='filename to overwrite from template prior to grader, for tamper-proofing (may be repeated)',
+                        default=DEFAULT_OVERWRITE_FILENAMES,
+                        action='append')
+    parser.add_argument('--setup',
+                        help='shell command to set up autograder container',
+                        default=DEFAULT_SETUP_COMMAND)
+    parser.add_argument('--output', '-o',
+                        help='path for output .zip',
+                        default=DEFAULT_ZIP_PATH)
+
+    args = parser.parse_args()
+
+    make_autograder(True,
+                    pathlib.PurePath(args.skeleton),
+                    pathlib.PurePath(args.repo),
+                    args.overwrite,
+                    args.setup,
+                    args.output)
+
+if __name__ == '__main__':
+    main()

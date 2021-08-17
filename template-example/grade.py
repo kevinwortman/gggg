@@ -16,7 +16,7 @@ s.reject_if_file_unchanged('product.hpp',
                            '953ed73434f4cae54b9161b48da2f25a2622522198a655c00de571bb596b16df')
 
 s.reject_if_file_changed('product_test.cpp',
-                         '126e0d8ff80a4abcd57f6655f6e28c410bdbfe983226f2ca44115a161565a9af')
+                         '0139691ee712697636a51e979b866b4a939f7840032fc81208f22c8931f90a5d')
 
 s.reject_unless_command_succeeds(['make', 'clean', 'product_test'])
 

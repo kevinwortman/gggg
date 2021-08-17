@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-import pathlib, shutil, subprocess
+import json, pathlib, shutil, subprocess
 
 # where to run "make grade"
 actual_path = '/autograder/submission'
@@ -12,9 +12,11 @@ children = list(pathlib.Path(actual_path).iterdir())
 if len(children) == 1 and children[0].is_dir():
     actual_path = children[0]
 
-# tamper-proof grading files
-for filename in ['Makefile', 'grade.py', 'algorithms_test.cpp']:
-    shutil.copy('/autograder/source/' + filename, actual_path)
+# overwrite grading files (tamper-proof)
+with open('overwrite.json') as f:
+    filenames = json.load(f)  
+    for filename in filenames:
+        shutil.copy('/autograder/source/' + filename, actual_path)
     
 # make grade
 subprocess.run(['make', 'grade'], cwd=actual_path)

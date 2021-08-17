@@ -18,7 +18,7 @@ void print_bar() {
 int main() {
 
   // Feel free to change these constants to suit your needs.
-  const size_t ITERATIONS = 1000000;
+  const size_t ITERATIONS = 10 * 1000*1000; // 10 million
   assert(ITERATIONS > 0);
 
   Timer timer;
@@ -33,8 +33,10 @@ int main() {
 
   print_bar();
   std::cout << "elapsed time for " << ITERATIONS << " iterations = "
-	    << elapsed << std::endl
-            << "average for one iteration = " << elapsed / ITERATIONS << std::endl;
+	    << elapsed << " sec " << std::endl
+            << "average for one iteration = "
+	    << elapsed / ITERATIONS
+	    << " sec" << std::endl;
   print_bar();
 
   return 0;
