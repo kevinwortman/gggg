@@ -104,11 +104,11 @@ Instructors or graders grade the assignment:
 
 ## `grade.py` Scripts
 
-Your assessment logic is defined in a `grade.py` script. The `make grade` make target runs `grade.py`. In turn, `grade.py` examines the submission code; runs unit tests and examines their output (if using); prints a human-readable summary to standard output, for student consumption; and writes a `results.json`, for Gradescope autograder consumption.
+Your assessment logic is defined in a `grade.py` script. The `make grade` make target runs `grade.py`. Students will run `make grade` interactively on local machines, and the Gradescope autograder will run `make grade` in a headless container. When invoked by `make grade`, `grade.py` typically examines the submission code; runs unit tests and examines their output (if using); prints a human-readable summary to standard output, for student consumption; and writes a `results.json`, for Gradescope autograder consumption.
 
 There are two kinds of grading results:
 - Reject: The submission is illegible or otherwise unacceptable. Examples: no names; identical to starter code; does not compile; unit tests crash. The score is a flat hardcoded number, usually around 50% or 0%.
-- Accept: The submission is acceptable. It is subjected to correctness tests, and each passing tests adds points to the score.
+- Accept: The submission is acceptable. It is subjected to correctness tests, and each passing tests adds points to the score, counting up from zero.
 
 See `gggg.py` for the high-level grading API.
 - An `Assignment` object represents assignment policies, notably the maximum score, and score for a rejected submission.
@@ -116,7 +116,7 @@ See `gggg.py` for the high-level grading API.
 
 Generally, a `grade.py` script will
 - `import` from `gggg`;
-- create an `Assignment` and `State;
+- create an `Assignment` and `State`;
 - reject if appropriate, immediately ending execution;
 - run a unit test program;
 - parse the unit test output and assign points for each passed test; and
@@ -154,3 +154,8 @@ s.gtest_suite_test('ProductNegative', 3)
 
 s.summarize()
 ```
+## Testing Interactive Programs
+
+Currently the only kind of correctness assessment that `gggg` supports is googletest unit tests. This supports advanced computer science courses where students implement C++ modules with functions and class members. However, it does not support introductory courses where students write programs that interact with stdin/stdout.
+
+Functionality for running programs with stdin output and arguments, and assessing stdout output and return codes, is planned for Spring 2022. The author will be teaching an introductory course in that time frame. We have prototype code for this kind of assessment, and will refactor it into `gggg`.
