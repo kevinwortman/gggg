@@ -130,7 +130,7 @@ Generally, a `grade.py` script will
 2. Create an `Assignment` and `State` object.
 3. Call `State.reject_if...` functions to detect and reject where appropriate. These functions have no effect if the submission has already been rejected.
 4. Call `State.gtest_run` to execute a unit test program. (Again, no effect if already rejected.)
-5. Call `State...test` functions to evaluate whether to grant points. (Again, no effect if already rejected.)
+5. Call `State...test` functions to evaluate whether to grant points. Each of these function calls corresponds to a rubric row. (Again, no effect if already rejected.)
 6. Call `State.summarize()` to produce output. This step tells the student their score, and whether their submisison was rejected. So it needs to happen even if the submission was rejected.
 
 The `template-example/grade.py` example contains:
