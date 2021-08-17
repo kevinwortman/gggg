@@ -3,6 +3,11 @@ Gradescope-Googletest Grading Glue (gggg)
 
 This is a lightweight framework for Gradescope autograding of C++ programming assignments.
 
+![Screenshot showing the "make grade" command in action.](https://github.com/kevinwortman/gggg/raw/main/media/make_grade.png)
+
+![Screenshot of the Gradescope autograder results page.](https://github.com/kevinwortman/gggg/raw/main/media/autograder_results.png)
+
+
 ## Architecture
 
 A gggg assignment involves several software services working together.
