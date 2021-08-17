@@ -86,9 +86,9 @@ Instructor creates an assignment:
     7. David McLaren’s github getting started video: https://www.youtube.com/watch?v=1a5L_xsGIm8
 
 Students work an assignment:
-1. Decide on **who is in the team**. This **must** be done before the steps below. GitHub Education does not support modifying groups, and there is no interface for instructors to modify a group.
-2. The first group member follows the invitation URL (looks like https://classroom.github.com/g/mwO5m1Za) to **create a team** and repository.
-3. Subsequent team members, if any, follow the invitation URL and join the team from the previous step. This is necessary for the team members to access the repo, but does not impact who gets credit for the submission.
+1. Decide on **who is in the team**. This **must** be done before the steps below. GitHub Education does not support modifying teams, and there is no interface for instructors to modify a team.
+2. The first team member follows the invitation URL (looks like https://classroom.github.com/g/mwO5m1Za) to **create a team** and repository.
+3. Subsequent team members, if any, follow the invitation URL and join the team from the previous step. This is necessary for the team members to access the repo, but does not impact who gets credit for the submission. Technically a team could skip this step and do all edits from a single github account, but this is discouraged.
 4. **Clone** the repo to local machines.
 5. **Develop code**; write, test, and debug. Run `make test` and respond to unit test feedback.
 6. **Preview grade**; run `make grade`, respond to feedback, and decide whether to continue working.
@@ -102,13 +102,18 @@ Instructors or graders grade the assignment:
 4. Perform manual grading (if applicable).
 5. Click *Publish Grades* to push scores to Canvas.
 
+After grading:
+1. Students may request regrades through Gradescope.
+2. Suggestion: ask students to request regrades only through Gradescope, not out-of-band. This makes it clear which question the student is inquiring about (which can be difficult to communicate), ensures that regrades do not slip through the cracks, and routes the request properly in the case of multiple graders.
+3. After regrading in Gradescope, the instructor needs to *Publish Grades* again to sync to Canvas.
+
 ## `grade.py` Scripts
 
 Your assessment logic is defined in a `grade.py` script. The `make grade` make target executes `grade.py`. Students will run `make grade` interactively on local machines, and the Gradescope autograder will run `make grade` in a headless container. When invoked by `make grade`, `grade.py` typically examines the submission code; runs unit tests and examines their output (if using); prints a human-readable summary to standard output, for student consumption; and writes a `results.json`, for Gradescope autograder consumption.
 
 There are two kinds of grading results:
-- **Reject**: The submission is illegible or otherwise unacceptable. Examples: no names; identical to starter code; does not compile; unit tests crash. The score is a flat hardcoded number, usually around 50% or 0%.
-- **Accept**: The submission is acceptable. It is subjected to correctness tests, and each passing tests adds points to the score, counting up from zero.
+- **Reject**: The submission is illegible or otherwise unacceptable. Examples: no names; identical to starter code; does not compile; unit tests crash. The score is a flat instructor-hardcoded number, often 0% or approximately 50%.
+- **Accept**: The submission is acceptible, and grading proceeds. It is subjected to correctness tests, and each passing tests adds points to the score, counting up from zero.
 
 See `gggg.py` for the high-level grading API.
 - An `Assignment` object represents assignment policies, notably the maximum score, and score for a rejected submission.
