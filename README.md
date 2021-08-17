@@ -20,26 +20,28 @@ A gggg assignment involves several software services working together.
 
 This section explains what happens in an assignment, in chronological order.
 
-Each term, to set up a class:
-1. Instructor follows the [GitHub Education quickstart instructions](https://docs.github.com/en/education/quickstart) to create an organization for the course, and establish/renew an educator discount.
-2. Instructor [creates a classroom object in GitHub Education](https://classroom.github.com/classrooms).
-3. Instructor adds the GradeScope App to the class Canvas space.
-4. Students create GitHub accounts. It is a best practice to assign this as an out-of-class homework assignment. GitHub has a DDoS mitigation that is triggered by a lab's worth of students all creating accounts at the same moment from similar IP addresses.
+Instructor prepares a class (once per term):
+1. Follow the [GitHub Education quickstart instructions](https://docs.github.com/en/education/quickstart) to create an organization for the course, and establish/renew an educator discount.
+2. [Create a classroom object in GitHub Education](https://classroom.github.com/classrooms).
+3. Add the GradeScope App to the class Canvas space.
 
-For each assignment:
-1. Instructor creates a **template repository** inside the GitHub Organization, to hold starter code distributed to students.
+Students prepare for a class (once per term):
+1. Create GitHub accounts. It is a best practice to assign this as an out-of-class homework assignment. GitHub has a DDoS mitigation that is triggered by a lab's worth of students all creating accounts at the same moment from similar IP addresses.
+
+Instructor creates an assignment:
+1. Create a **template repository** inside the GitHub Organization, to hold starter code distributed to students.
    1. In the GitHub web view: create a private repository; suggest no to README; MIT license; and C++ .gitignore.
    2. In Settings: turn on `Template repository`.
    3. Clone the repo to a local machine. Copy files from the `ggg/template-skeleton` directory: `Makefile`, `README.md`, `gggg.py`, `grade.py`, and (if relevant) `timer.hpp`.
-2. Instructor creates a C++ **solution**, unit tests, Makefile, and `grade.py` script (see the `template-example` directory for a working example). Confirm that `make grade` works and shows a perfect score. Never commit the solution, because students could view it in the git history.
-3. Instructor **archives the solution**. Suggestion: `zip` the repo on the commandline.
-4. Instructor modifies the `.hpp` and `.cpp` files to become **starter code**; confirms that `make grade` works and shows an imperfect score; and commits, pushes the starter code.
-6. Instructor **archives the starter code** for long term storage. Suggestion: web view > Code > Download ZIP.
-7. Instructor creates an **autograder ZIP**. In a terminal, move inside the template repo and run the gggg `make-autograder` script. `make-autograder -h` displays usage help. Pass a `-f <filename>` argument for each `<filename>` that students may not modify. The autograder will overwrite these files with starter code to prevent exploits against the autograder. Example:
+2. Create a C++ **solution**, unit tests, Makefile, and `grade.py` script (see the `template-example` directory for a working example). Confirm that `make grade` works and shows a perfect score. Never commit the solution, because students could view it in the git history.
+3. **Archives the solution**. Suggestion: `zip` the repo on the commandline.
+4. Modify the `.hpp` and `.cpp` files to become **starter code**; confirm that `make grade` works and shows an imperfect score; and commit+push the starter code.
+6. **Archive the starter code** for long term storage. Suggestion: web view > Code > Download ZIP.
+7. Creates an **autograder ZIP**. In a terminal, move into the template repo and run the gggg `make-autograder` script. `make-autograder -h` displays usage help. Pass a `-f <filename>` argument for each `<filename>` that students may not modify. The autograder will overwrite these files with starter code to prevent exploits against the autograder. Example:
    ```
    $ make-autograder -f Makefile -f gggg.py -f grade.py -f product_test.cpp -o autograder.zip
    ```
-9. Instructor creates a **GitHub Education assignment object**: [classroom.github.com](https://classroom.github.com) > New Assignment > Create Group Assignment (or individual assignment, as the case may be). Suggested settings:
+9. Create a **GitHub Education assignment object**: [classroom.github.com](https://classroom.github.com) > New Assignment > Create Group Assignment (or individual assignment, as the case may be). Suggested settings:
    1. Title: "Project 2", "Lab 3", or similar.
    2. Deadline: blank (Gradescope enforces deadlines)
    3. Individual or Group: self-explanatory
@@ -54,25 +56,49 @@ For each assignment:
    12. Add autograding tests: no (we use Gradescope instead)
    13. Enable feedback pull requests: no (default)
    14. (Create Assignment)
-10. Instructor creates a **Canvas assignment object**. This will only store the grades and make the deadline visible to students in Canvas. (If you do not use Canvas, create an assignment in your LMS of choice.)
-   1. Decide whether your assignment will be graded solely on the basis of automated `grade.py` scores, or will also include manual subjective scores.
-   2. Calculate your maximum score = (max `grade.py` points) + (max manual points)
-   3. Canvas > Create Assignment
-   4. Points: maximum score calculated above
-   5. Submission type: External Tool > Gradescope. Load This Tool In A New Tab: yes 
-   6. Allowed Attempts: Limited to 1 (unclear if this is honored)
-   7. Assign to: everyone, with your stated deadline. (This deadline will be communicated to students in their calendar view. Gradescope will enforce the deadline.)
-11. Instructor creates a **Gradescope assignment object**.
-   1. [gradescope.com](https://www.gradescope.com/) > Course > Assignments > Create New Assignment > Programming Assignment > Next
-   2. Assignment Name: same as the Canvas assignment, e.g. "Project 2"
-   3. Autograder points: (max `grade.py` points)
-   4. Enable Manual Grading: yes iff you include manual subjective scores
-   5. Release date: now
-   6. Due date: match deadline in Canvas
-   7. Enable Group Submission: yes (if this is a group project)
-   8. Limit Group Size: match group size in Github Education
-   9. Next
-   10. Configure Autograder: upload the `autograder.zip` created above. Wait for the container to finish building.
-   11. Test Autograder: 
+   15. Copy the assignment link, you will need it below (looks like https://classroom.github.com/g/mwO5m1Za).
+10. Create a **Canvas assignment object**. This will only store the grades and make the deadline visible to students in Canvas. (If you do not use Canvas, create an assignment in your LMS of choice.)
+    1. Decide whether your assignment will be graded solely on the basis of automated `grade.py` scores, or will also include manual subjective scores.
+    2. Calculate your maximum score = (max `grade.py` points) + (max manual points)
+    3. Canvas > Create Assignment
+    4. Points: maximum score calculated above
+    5. Submission type: External Tool > Gradescope. Load This Tool In A New Tab: yes 
+    6. Allowed Attempts: Limited to 1 (unclear if this is honored)
+    7. Assign to: everyone, with your stated deadline. (This deadline will be communicated to students in their calendar view. Gradescope will enforce the deadline.)
+11. Create a **Gradescope assignment object**.
+    1. [gradescope.com](https://www.gradescope.com/) > Course > Assignments > Create New Assignment > Programming Assignment > Next
+    2. Assignment Name: same as the Canvas assignment, e.g. "Project 2"
+    3. Autograder points: (max `grade.py` points)
+    4. Enable Manual Grading: yes iff you include manual subjective scores
+    5. Release date: now
+    6. Due date: match deadline in Canvas
+    7. Enable Group Submission: yes (if this is a group project)
+    8. Limit Group Size: match group size in Github Education
+    9. Next
+    10. Configure Autograder: Upload the `autograder.zip` created above. Wait for the container to finish building.
+    11. Test Autograder: Upload the solution archive ZIP you created above, and confirm that it is graded properly with a perfect score. Upload the starter archive ZIP you created above, and confirm that it is graded properly with an imperfect score.
+    12. Link Canvas: Assignment > Settings > Canvas Assignment: choose your Canvas assignment; click Link
+12. Create an **assignment brief (instructions)** and publish it to students. A Canvas Page is best for accessibility, but a Google Doc is also acceptable. Include links to:
+    1. The Github Classroom invitation URL (looks like https://classroom.github.com/g/mwO5m1Za)
+    3. Gradescope Student Center: https://help.gradescope.com/category/cyk4ij2dwi-student-workflow
+    5. GitHub guides: https://guides.github.com/
+    6. Pro Git book: https://git-scm.com/book/en/v2
+    7. David McLaren’s github getting started video: https://www.youtube.com/watch?v=1a5L_xsGIm8
 
+Students work an assignment:
+1. Decide on **who is in the team**. This **must** be done before the steps below. GitHub Education does not support modifying groups, and there is no interface for instructors to modify a group.
+2. The first group member follows the invitation URL (looks like https://classroom.github.com/g/mwO5m1Za) to **create a team** and repository.
+3. Subsequent team members, if any, follow the inviation URL and join the team from the previous step.
+4. **Clone** the repo to local machines.
+5. **Develop code**; write, test, and debug. Run `make test` and respond to unit test feedback.
+6. **Preview grade**; run `make grade`, respond to feedback, and decide whether to continue working.
+7. **Submit** the repo to Gradescope. Follow [the instructions](https://help.gradescope.com/article/ccbpppziu9-student-submit-work#code_submissions); submitting a GitHub repo directly is bulletproof, but uploading a ZIP is also acceptable.
+8. **Confirm** that the Gradescope autograder feedback matches the local `make grade` output. Report discrepancies to the instructor.
+
+Instructors or graders grade the assignment:
+1. Suggestion: wait until after the deadline and grade all submissions in one pass.
+2. Check that the autograder results look reasonable (some perfect, low, and in-between scores).
+3. Use the [Code Similarity tool](https://help.gradescope.com/article/3vr6x46ppn-instructor-assignment-programming-code-similarity) to detect gross plagiarism and respond accordingly.
+4. Perform manual grading (if applicable).
+5. Click *Publish Grades* to push scores to Canvas.
 
