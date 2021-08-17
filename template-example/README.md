@@ -1,4 +1,4 @@
-# Project 2: Polynomial versus Exponential Time
+# Project 2: Product
 
 Group members:
 
