@@ -2,11 +2,10 @@
 
 import argparse, json, os, pathlib, zipfile, zlib
 
-GGGG_REPO_PATH = pathlib.PurePath(os.path.realpath(__file__)).parent
-DEFAULT_SKELETON_PATH = pathlib.PurePath(GGGG_REPO_PATH, 'autograder-skeleton')
+GGGG_REPO_PATH = pathlib.Path(os.path.realpath(__file__)).parent
+DEFAULT_SKELETON_PATH = pathlib.Path(GGGG_REPO_PATH, 'autograder-skeleton')
 DEFAULT_TEMPLATE_REPO_PATH = pathlib.Path.cwd()
 DEFAULT_OVERWRITE_FILENAMES = []
-DEFAULT_SETUP_COMMAND = 'apt-get -y install python3 build-essential clang libgtest-dev'
 DEFAULT_ZIP_PATH = 'autograder.zip'
 
 RUN_AUTOGRADER_FILENAME = 'run_autograder'
@@ -15,14 +14,12 @@ def make_autograder(verbose,
                     skeleton_path,
                     template_repo_path,
                     overwrite_filenames,
-                    setup_command,
                     zip_path):
     if not (isinstance(verbose, bool) and
-            isinstance(skeleton_path, pathlib.PurePath) and
-            isinstance(template_repo_path, pathlib.PurePath) and
+            isinstance(skeleton_path, pathlib.Path) and
+            isinstance(template_repo_path, pathlib.Path) and
             isinstance(overwrite_filenames, list) and
             all([isinstance(x, str) for x in overwrite_filenames]) and
-            isinstance(setup_command, str) and
             isinstance(zip_path, str)):
         raise TypeError
     
@@ -34,21 +31,18 @@ def make_autograder(verbose,
         if verbose:
             print('creating ' + zip_path)
         
-        # copy run_autograder
-        run_autograder_path = pathlib.PurePath(skeleton_path, RUN_AUTOGRADER_FILENAME)
-        if verbose:
-            print('adding ' + str(run_autograder_path))
-        zip.write(run_autograder_path, RUN_AUTOGRADER_FILENAME)
-
-        # create setup.sh
-        if verbose:
-            print('adding setup.sh')
-        zip.writestr('setup.sh', setup_command)
+        # copy skeleton files
+        for path in skeleton_path.iterdir():
+            filename = path.name
+            if verbose:
+                print('adding ' + filename)
+            zip.write(path, filename)
 
         # create overwrite.json
+        json_str = json.dumps(overwrite_filenames)
         if verbose:
-            print('creating overwrite.json')
-        zip.writestr('overwrite.json', json.dumps(overwrite_filenames))
+            print('creating overwrite.json with contents "' + json_str + '"')
+        zip.writestr('overwrite.json', json_str)
 
         # copy overwrite files
         for filename in overwrite_filenames:
@@ -60,29 +54,25 @@ def make_autograder(verbose,
 def main():
     parser = argparse.ArgumentParser(description='create a GradeScope autograder .ZIP file')
     parser.add_argument('--skeleton',
-                        help='path to gggg/autograder-skeleton directory',
+                        help='path to gggg/autograder-skeleton directory (default: ' + str(DEFAULT_SKELETON_PATH) + ')',
                         default=DEFAULT_SKELETON_PATH)
     parser.add_argument('--repo',
-                        help='path to template github repo (the one you distribute to students)',
+                        help='path to template github repo, the one you distribute to students (default: .)',
                         default=DEFAULT_TEMPLATE_REPO_PATH)
     parser.add_argument('--overwrite', '-f',
                         help='filename to overwrite from template prior to grader, for tamper-proofing (may be repeated)',
                         default=DEFAULT_OVERWRITE_FILENAMES,
                         action='append')
-    parser.add_argument('--setup',
-                        help='shell command to set up autograder container',
-                        default=DEFAULT_SETUP_COMMAND)
     parser.add_argument('--output', '-o',
-                        help='path for output .zip',
+                        help='path for output .zip (default: ' + str(DEFAULT_ZIP_PATH) + ')',
                         default=DEFAULT_ZIP_PATH)
 
     args = parser.parse_args()
 
     make_autograder(True,
-                    pathlib.PurePath(args.skeleton),
-                    pathlib.PurePath(args.repo),
+                    pathlib.Path(args.skeleton),
+                    pathlib.Path(args.repo),
                     args.overwrite,
-                    args.setup,
                     args.output)
 
 if __name__ == '__main__':

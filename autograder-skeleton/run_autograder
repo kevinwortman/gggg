@@ -3,7 +3,7 @@
 import json, pathlib, shutil, subprocess
 
 # where to run "make grade"
-actual_path = '/autograder/submission'
+actual_path = pathlib.PurePath('/autograder/submission')
 
 # The .zip is supposed to contain just the files, but a common user
 # error is to provide a .zip with one directory that contains the
@@ -13,7 +13,7 @@ if len(children) == 1 and children[0].is_dir():
     actual_path = children[0]
 
 # overwrite grading files (tamper-proof)
-with open('overwrite.json') as f:
+with open('/autograder/source/overwrite.json') as f:
     filenames = json.load(f)  
     for filename in filenames:
         shutil.copy('/autograder/source/' + filename, actual_path)

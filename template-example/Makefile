@@ -1,5 +1,5 @@
 
-CLANG_FLAGS = -std=c++17 -Wall -g
+CLANG_FLAGS = -std=c++17 -Wall
 
 GTEST_FLAGS = -lpthread -lgtest_main -lgtest
 
