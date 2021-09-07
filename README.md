@@ -68,7 +68,7 @@ Instructor creates an assignment:
     3. Canvas > Create Assignment
     4. Points: maximum score calculated above
     5. Submission type: External Tool > Gradescope. Load This Tool In A New Tab: yes 
-    6. Allowed Attempts: Limited to 1 (unclear if this is honored)
+    6. Allowed Attempts: Unlimited (unclear if this setting matters when using External Tool)
     7. Assign to: everyone, with your stated deadline. (This deadline will be communicated to students in their calendar view. Gradescope will enforce the deadline.)
 11. Create a **Gradescope assignment object**. This is the more substantial assignment where students make submissions, view feedback, and may request regrades.
     1. [gradescope.com](https://www.gradescope.com/) > Course > Assignments > Create New Assignment > Programming Assignment > Next
