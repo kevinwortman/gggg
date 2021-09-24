@@ -37,7 +37,7 @@ Instructor creates an assignment:
 1. Create a **template repository** inside the GitHub Organization, to hold starter code distributed to students.
    1. In the GitHub web view: create a private repository; suggest no to README; MIT license; and C++ .gitignore.
    2. In Settings: turn on `Template repository`.
-   3. Clone the repo to a local machine. Copy files from the `ggg/template-skeleton` directory: `Makefile`, `README.md`, `gggg.py`, `grade.py`, and (if relevant) `timer.hpp`.
+   3. Clone the repo to a local machine. **Copy files from the `ggg/template-skeleton` directory:** `Makefile`, `README.md`, `gggg.py`, `grade.py`, and (if relevant) `timer.hpp`.
 2. Create a C++ **solution**, unit tests, Makefile, and `grade.py` script (see the `template-example` directory for a working example). Confirm that `make grade` works and shows a perfect score. Never commit the solution, because students could view it in the git history. The [Gradescope containers run in Ubuntu 18.04](https://gradescope-autograders.readthedocs.io/en/latest/specs/), so ensure that your code can compile and run in that environment.
 3. **Archive the solution**. Suggestion: `zip` the repo on the commandline.
 4. Modify the `.hpp` and `.cpp` files to become **starter code**; add a TODO comment everywhere that students should edit code; confirm that `make grade` works and shows an imperfect score; and commit+push the starter code.
