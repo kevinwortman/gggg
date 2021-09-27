@@ -15,7 +15,8 @@ A gggg assignment involves several software services working together.
  * Canvas (or another LMS) announces the assignment to students, and stores canonical grades.
  * GitHub Education manages a private repository for each student team. Each repository is initially a copy of a template repository, containing starter code, created by an instructor. Students submit work by pushing to these repositories.
  * Gradescope manages grading, including automated grading (autograding) and optional subjective grading. Gradescope pushes scores to Canvas.
- * GoogleTest may be used for graded code correctness tests.
+ * GoogleTest can be used for graded code correctness tests.
+ * Other rubric items can be defined in Python.
  * This gggg project is the glue that connects these components.
    - An instructor specifies how a submission is graded by writing a short Python script, conventionally named `grade.py`. A `grade.py` script uses the `gggg.py` library, which defines an API for declaring submission and rubric policies.
    - Sample `Makefile`s have a `make grade` target. Students run `make grade` locally to preview their grade. The Gradescope autograde runs `make grade` to produce a machine-readable score. 
