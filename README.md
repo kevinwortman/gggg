@@ -1,4 +1,4 @@
-# gggg
+# gggg (g4)
 Gradescope-Googletest Grading Glue (gggg)
 
 This is a lightweight framework for Gradescope autograding of C++ programming assignments.
@@ -90,6 +90,7 @@ Instructor creates an assignment:
     5. GitHub guides: https://guides.github.com/
     6. Pro Git book: https://git-scm.com/book/en/v2
     7. David McLaren’s github getting started video: https://www.youtube.com/watch?v=1a5L_xsGIm8
+13. Watch your email for, and **approve the third-party application approval request**. The first time that a student tries to submit a repo from your organization to Gradescope, github will ask you (instructor) to approve this integration. Until you approve this, when students visit Gradescope and try to submit a Github repo, their repo will not appear in the list of choices.
 
 Students work an assignment:
 1. Decide on **who is in the team**. This **must** be done out-of-band before the next steps. GitHub Education does not support modifying teams, and there is no interface for instructors to modify a team.
