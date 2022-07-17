@@ -263,7 +263,7 @@ class State:
             self.reject('command "' +
                         ' '.join(args) +
                         '" timed out after ' +
-                        str(command.timeout) +
+                        str(timeout) +
                         ' seconds')
             
     def add_test(self, display_name, max_score, score, message):
