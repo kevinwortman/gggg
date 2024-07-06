@@ -19,4 +19,4 @@ make
 cp *.a /usr/lib
 
 # other packages
-apt-get -y install python3.8 clang
+apt-get -y install python3 clang
