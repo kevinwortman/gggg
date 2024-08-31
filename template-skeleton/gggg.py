@@ -374,13 +374,14 @@ class State:
 
             name = testsuite.get('name')
             failures = int(testsuite.get('failures'))
+            skips = int(testsuite.get('skipped'))
 
             message = ''
             for testcase in testsuite:
                 for failure in testcase:
                     message += failure.text
         
-            passed = (failures == 0)
+            passed = (failures == 0 and skips == 0)
         
             result[name] = GTestSuiteResult(name, passed, message)
 
