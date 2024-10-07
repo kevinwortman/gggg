@@ -15,7 +15,7 @@
 #  - TODO present, missing
 #  - gtest tests: all pass, none pass, some pass
 
-import hashlib, json, pathlib, subprocess, xml.etree.ElementTree
+import hashlib, json, pathlib, subprocess, unittest, xml.etree.ElementTree
 
 DEFAULT_TIMEOUT = 60
 
@@ -26,6 +26,8 @@ DEFAULT_REJECTED_TEST_MESSAGE = 'submission was rejected, so test was skipped'
 DEFAULT_GTEST_XML_FILENAME = 'gtest.xml'
 DEFAULT_GRADESCOPE_JSON_FILENAME = 'results.json'
 DEFAULT_INDENT = ' ' * 4
+
+PYTHON_INTERPRETER = 'python3'
 
 class Assignment:
     def __init__(self,
@@ -266,6 +268,19 @@ class State:
                         str(timeout) +
                         ' seconds')
             
+    def reject_unless_python_loads(self, python_source_filename):
+        if not isinstance(python_source_filename, str):
+            raise ValueError
+        
+        if self.rejected:
+            return
+
+        ex = execute([PYTHON_INTERPRETER, python_source_filename])
+        if ex.result == Execution.FAILURE:
+            self.reject(f'python source file "{python_source_filename}" failed to load with message:\n{ex.output}')
+        elif ex.result == Execution.TIMEOUT:
+            self.reject(f'python source file "{python_source_filename}" timed out while importing')
+                
     def add_test(self, display_name, max_score, score, message):
         
         if not (isinstance(display_name, str) and
@@ -274,9 +289,9 @@ class State:
                 isinstance(message, str)):
             raise TypeError
 
-        if ((sum([test.max_score for test in self.tests]) + max_score)
-             > self.assignment.max_score):
-            raise ValueError
+        new_total_score = sum([test.max_score for test in self.tests]) + max_score
+        if new_total_score > self.assignment.max_score:
+            raise ValueError(f'assignment has max score {self.assignment.max_score} but tests add up to {new_total_score} points')
         
         if self.rejected:
             return
@@ -344,7 +359,6 @@ class State:
         if not (isinstance(name, str) and
                 isinstance(max_score, int)):
             raise TypeError
-
         if not (max_score > 0):
             raise ValueError
         
@@ -387,6 +401,38 @@ class State:
 
         return result
         
+    # python unittest
+    def unittest_test(self, unittest_dotted_name, max_score):
+        if not isinstance(unittest_dotted_name, str):
+            raise TypeError
+        if not (max_score > 0):
+            raise ValueError
+        
+        if self.rejected:
+            return        
+        
+        loader = unittest.defaultTestLoader
+        suite = loader.loadTestsFromName(unittest_dotted_name)
+        result = unittest.TestResult()
+        suite.run(result)
+
+        if result.wasSuccessful():
+            score = max_score
+            message = ''
+        else:
+            score = 0
+            message = ''
+            problems = result.errors + result.failures + result.unexpectedSuccesses
+            for case, traceback in problems:
+                message += traceback
+
+        self.add_test(
+            unittest_dotted_name,
+            max_score,
+            score,
+            message
+        )
+
     def total_score(self):
         if self.rejected:
             return self.assignment.rejected_score
