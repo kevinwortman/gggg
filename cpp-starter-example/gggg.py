@@ -196,7 +196,7 @@ class State:
         if self.rejected:
             return
         if not pathlib.Path(path).exists():
-            self.reject('required file "' + filename + '" does not exist')
+            self.reject(f'required file "{path}" does not exist')
 
     def reject_unless_files_exist(self, path_list):
         if not (isinstance(path_list, list) and
